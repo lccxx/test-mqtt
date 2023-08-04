@@ -1,0 +1,34 @@
+services:
+  n1:
+    image: emqx/emqx:5.1.4
+    environment:
+      - EMQX_NODE_NAME=node@n1.sg
+      - EMQX_NODE__COOKIE=123456qwerty
+      - EMQX_CLUSTER__DISCOVERY_STRATEGY=static
+      - EMQX_CLUSTER__STATIC__SEEDS=[ node@n1.sg, node@n2.sg ]
+    expose: [ 1883, 8083, 8084, 8883 ]
+    ports:
+      - 18083:18083
+      - 1883:1883
+      - 8083:8083
+      - 8084:8084
+      - 8883:8883
+    networks: { in: { aliases: [ n1.sg ] } }
+  n2:
+    image: emqx/emqx:5.1.4
+    environment:
+      - EMQX_NODE_NAME=node@n2.sg
+      - EMQX_NODE__COOKIE=123456qwerty
+      - EMQX_CLUSTER__DISCOVERY_STRATEGY=static
+      - EMQX_CLUSTER__STATIC__SEEDS=[ node@n1.sg, node@n2.sg ]
+    expose: [ 1883, 8083, 8084, 8883 ]
+    ports:
+      - 28083:18083
+      - 21883:1883
+      - 28183:8083
+      - 28084:8084
+      - 28883:8883
+    networks: { in: { aliases: [ n2.sg ] } }
+
+networks:
+  in:

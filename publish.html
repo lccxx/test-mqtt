@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>test mqtt publish</title>
+
+<style><!--
+body {
+    background-color: black;
+    color: #fffc;
+}
+--></style>
+</head>
+
+<form id="publish-form">
+    <label><input id="text" /></label>
+    <button type="submit">publish</button>
+</form>
+<script src="js/mqtt.min.js"></script>
+<script>// <!--
+// noinspection JSUnresolvedReference
+const client = mqtt.connect(`wss://${location.hostname}/mqtt`);
+const topic = 'test/n1';
+client.on("connect", () => {
+    client.subscribe(topic, err => {
+        if (!err) {
+            document.querySelector('#publish-form').onsubmit = evt => {
+                client.publish(topic, document.querySelector('#text').value);
+                evt.preventDefault();
+            };
+        }
+    });
+});
+// --></script>
